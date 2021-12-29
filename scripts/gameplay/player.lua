@@ -114,7 +114,7 @@ function M.new(instance, options)
             if state ~= "run" then
                 if dir ~= 0 then
                     if state == "idle" then
-                        -- print("run")
+         
                         instance:applyForce(instance.speed * dir, nil, instance.x, instance.y)
                         instance:chargeSequence("run")
                     elseif instance.isJumping then
@@ -128,7 +128,7 @@ function M.new(instance, options)
             if state == "run" then
                 if instance.prevDir and instance.dir ~= 0 then
                     if instance.dir ~= instance.prevDir then
-                        print("here")
+
                         instance:setLinearVelocity(0, 0)
                         instance:applyForce(instance.speed * dir, 0)
                     end
@@ -254,13 +254,10 @@ function M.new(instance, options)
         local other = event.other
       
         if other.name == "flyplatform" then
-            -- instance.y = instance.y +1
-            -- print("jump on platform")
+
             if other.direction == "leftright" then
                 if self.dir == 0 and not self.isJumping then
-                    -- if ((self.y - self.originalHeight/2) <= (other.y - other.height/2)) then
-                    --     self:setLinearVelocity(other.vx, self.vy)
-                    -- end
+
                     local pX, pY = getPoint("none", "bottom", self)
                     if pY <= (other.y - other.height/2) then
                             self:setLinearVelocity(other.vx, self.vy)
@@ -270,8 +267,7 @@ function M.new(instance, options)
                 if self.dir == 0 and not instance.jumpPressed then
                     instance.isGrounded = true
                     instance.isJumping = false
-                    -- instance.isOnPlatformDown = true
-                    
+
                     if other.vy > 0 then
                         self:setLinearVelocity(0, other.vy * 2)
                     else
@@ -284,15 +280,7 @@ function M.new(instance, options)
         end
     end
     
-    function instance:collision(event)
-        local other = event.other
-        local phase = event.phase
-        if phase == "began" then
-            
-        elseif phase == "ended" then
 
-        end
-    end
     local function checkGroundCollision (event)
         local other = event.other
         local target = event.target
@@ -303,17 +291,14 @@ function M.new(instance, options)
                     if instance.isWall then
                         instance.isWall = false
                     end
-                    print("onGround")
+             
                     instance:setLinearVelocity(0,0)
                     instance:chargeSequence("idle")
                     instance.isJumping = false
                     instance.isGrounded = true
                     instance.canFallJump = true
             end
-            if other.name == "flyplatform" then
-                -- instance.isJumping = false
-                -- instance.isGrounded = true
-            end
+
             if other.name == "finish" and instance.state == "fall" then
                 local isQuestComplete = scene.questlog:checkAllQuestComplete()
                 if isQuestComplete then
@@ -334,10 +319,6 @@ function M.new(instance, options)
                     instance:applyLinearImpulse(0, instance.forceJump, instance.x, instance.y)
                     other:bounce()
                 end
-                -- print(other.type)
-
-                -- self:destroy()
-                -- self:removeSelf()
             end
  
             if other.name == "spike" then
@@ -345,9 +326,6 @@ function M.new(instance, options)
             end
 
         elseif phase == "ended"  and not instance.isDie then
-            if other.type == "ground" and instance.vy > 0 then -- 
-   
-            end
             if other.name == "flyplatform" and other.direction == "topdown" then
                 instance.isOnPlatformDown = false
             end
@@ -360,14 +338,12 @@ function M.new(instance, options)
         if phase == "began" then
 
             if other.type == "ground" --[[and instance.vy > 0]] then --and not instance.isGround and instance.vy > 0 then
-                -- print("check wall")
                 instance.isWall = true
             end
       
         elseif phase == "ended" then
             
             if other.type == "ground" --[[and instance.vy < 0]] then
-                -- print("out wall")
                 instance.isWall = false
             end
         end
@@ -382,7 +358,6 @@ function M.new(instance, options)
     local function key(event)
         if ( event.keyName == "a" or event.keyName == "left" ) then
             if event.phase == "down" then
-              -- hero:setLinearVelocity(-hero.speed, vy, hero.x, hero.y)
               instance.leftDir = -1
             elseif event.phase == "up" then
                 instance.leftDir = 0
@@ -397,31 +372,6 @@ function M.new(instance, options)
             if event.phase == "down" then
                 instance.jumpPressed = true
                 instance:jump()
-       
-            --   if instance.state ~= "hit" and instance.state ~= "die" and instance.state ~= "finish" then
-            --     if instance.isGrounded then
-            --       if instance.state ~= "jump" and not instance.isJumping then
-            --         instance:jump()
-            --       end
-            --     else
-            --         if instance.canDoubleJump and instance.isJumping and instance.state ~= "double jump" then
-            --             instance.canDoubleJump = false
-            --             instance:chargeSequence("double jump")
-            --             instance:setLinearVelocity(0, 0)
-            --             instance:applyLinearImpulse(0, instance.forceJump, instance.x, instance.y)
-            --             -- instance:effectDust("assets/particle/dust_jump.json")
-      
-            --         end
-            --     end
-            --     if instance.canWallJump and instance.state == "wall jump" then
-            --       local vx, vy = instance:getLinearVelocity()
-      
-            --       instance:chargeSequence("jump")
-            --       instance.canWallJump = false
-            --       instance:applyForce(40 * instance.dir, 0, instance.x, instance.y)
-            --       instance:applyLinearImpulse(instance.vx * instance.dir, instance.forceJump, instance.x, instance.y)
-            --     end
-            --   end
             elseif event.phase == "up" then
                 instance.jumpPressed = false
             end
