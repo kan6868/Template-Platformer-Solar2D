@@ -1,0 +1,36 @@
+[
+    {
+        "level": "0",
+        "quest":[
+            {
+                "quest":"Collect",
+                "type":"fruit",
+                "name":"apple",
+                "amount": 6
+            },
+            {
+                "quest":"Collect",
+                "type":"fruit",
+                "name":"banana",
+                "amount": 3
+            }
+        ]
+    },
+    {
+        "level": "1",
+        "quest":[
+            {
+                "quest":"Collect",
+                "type":"fruit",
+                "name":"apple",
+                "amount": 8
+            },
+            {
+                "quest":"Collect",
+                "type":"fruit",
+                "name":"cherrie",
+                "amount": 4
+            }
+        ]
+    }
+]
