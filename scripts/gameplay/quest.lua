@@ -40,7 +40,7 @@ function M.new(world)
     group.isComplete = false
 
     function group:init()
-        local width = 90
+        local width = 100
         local height = 20
         local paddingBottom = 16
         local paddingTop = 30
@@ -50,7 +50,7 @@ function M.new(world)
         local radiusFrame = 1
         group.offsetTransition = width * 2 + frameIcon/2
         local x, y = (_GB.ox + width/2) , _GB.oy +  paddingTop
-
+        if not dataQuest then return false end
         for i = 1, #dataQuest do
             group.quest[i] = display.newGroup()
             local q = group.quest[i]
@@ -160,8 +160,12 @@ function M.new(world)
                 for i = 1, #group.quest do
                     local q = group.quest[i]
                     if not q.isShow then
+                        -- if q.x >= (_GB.ox + 50) + group.offsetTransition then
+                        --     return false
+                        -- end
+                        q.isShow = true
                         transition.to(q, { tag = "quest"..q.id, time = 100, x = q.x + group.offsetTransition, onComplete = function (obj)
-                            q.isShow = true
+             
                             group:hide(2000, nil)
                         end})
                     end

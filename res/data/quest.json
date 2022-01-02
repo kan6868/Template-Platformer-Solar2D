@@ -32,5 +32,22 @@
                 "amount": 4
             }
         ]
+    },
+    {
+        "level": "2",
+        "quest":[
+            {
+                "quest":"Collect",
+                "type":"fruit",
+                "name":"pineapple",
+                "amount": 4
+            },
+            {
+                "quest":"Collect",
+                "type":"fruit",
+                "name":"watermelon",
+                "amount": 4
+            }
+        ]
     }
 ]

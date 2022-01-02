@@ -53,10 +53,19 @@ function scene:create( event )
     if self.world:listTypes("spike") then
         self.world:extend("spike")
     end
+
     if self.world:listTypes("flyplatform") then
         self.world:extend("flyplatform")
     end
-  
+    
+    if self.world:listTypes("jumpPoint") then
+        self.world:extend("jumpPoint")
+    end
+
+    if self.world:listTypes("fallingPlatform") then
+        self.world:extend("fallingPlatform")
+    end
+
     mainGroup:insert(self.world)
     
     self.questlog = questlog.new(self.world)
@@ -73,7 +82,7 @@ function scene:create( event )
     scene.restartGame = function ()
         -- player:finalize()
         print(self.level)
-        if self.level == 2 then
+        if self.level > 2 then
             self.level = 0
         end
         _GB.composer.gotoScene("scenes.refresh", {params = {level = self.level}})
