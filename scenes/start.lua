@@ -48,7 +48,7 @@ function scene:create( event )
                     screenFadeIn(function ()
                     
                         _GB.composer.gotoScene(
-                            "scenes.tutorial", {time = 500, params = {level = 2}}--"tutorial"}}
+                            "scenes.game", {time = 500, params = {level = 0}}--"tutorial"}}
                         )
                         btnStart:removeEventListener("touch", btnStart.touch)
                     end)
