@@ -1,5 +1,6 @@
 # Template-Platformer-Solar2D
 If you like it or feel it is useful to you, please give it 1 star or better yet buy me a cup of coffee.
+Ko-fi.com/kandev
 </br>
 Map editor: https://www.mapeditor.org/
 </br>
