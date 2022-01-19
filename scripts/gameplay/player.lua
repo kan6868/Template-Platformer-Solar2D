@@ -170,7 +170,9 @@ function M.new(instance, options)
         self.desappearing = effect.new(self, {})
         self.parent:insert(self.desappearing)
         self.desappearing:active()
-
+        if self.lightId then
+            scene.lightSystem:removeLight(self.lightId)
+        end
     end
     
     function instance:show()

@@ -70,18 +70,34 @@ function M.new( data, assetPath, options)
     map:boundsCheck()
   end
   
-  function map:pointScale(scale, object)
+  function map:pointScale(scale, object, isTransition, time)
+    local isTransition = isTransition or false
+    local time = time or 1000
       local ox, oy, nx, ny
+
       if object then
-          ox, oy = object:localToContent(0,0)
-          self.xScale, self.yScale = scale, scale
-          nx, ny = object:localToContent(0,0)
+  
+
+          if not isTransition then
+            ox, oy = object:localToContent(0,0)
+            self.xScale, self.yScale = scale, scale
+            nx, ny = object:localToContent(0,0)
+            
+            self:translate(ox-nx, oy-ny)
+          else
+            transition.to(self, {time = time, xScale = scale, yScale = scale, onComplete = function()
+      
+              -- transition.to(self, {time = time, x = ox - nx, y = oy - ny})
+            end})
+          end
       else
           ox, oy = self:localToContent(0,0)
           self.xScale, self.yScale = scale, scale
           nx, ny = self:localToContent(0,0)
+          
+        self:translate(ox-nx, oy-ny)
       end
-      self:translate(ox-nx, oy-ny)
+
   end
 
   function map:finalize()

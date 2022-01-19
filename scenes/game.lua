@@ -3,12 +3,15 @@ local world         = require "scripts.gameplay.world"
 local hero          = require "scripts.gameplay.player"
 local questlog      = require "scripts.gameplay.quest"
 local button        = require "scripts.interface.button"
+local light         = require "scripts.libs.light"
+-- local pixelWorld    = require "scripts.libs.pixelWorld"
+
 local physics       = require "physics"
 
 local scene = _GB.composer.newScene()
 
 local btnRestart
-local player
+local player, lightSystem
 -- create()
 function scene:create( event )
  
@@ -41,6 +44,14 @@ function scene:create( event )
 
     self.world = world.new(pathData, pathImg, {})
     self.world.extensions = "scripts.gameplay.objects."
+    mainGroup:insert(self.world)
+
+    lightSystem = light.new(0.35)
+    lightSystem.x, lightSystem.y = _GB.cx, _GB.cy
+    self.lightSystem = lightSystem
+
+    mainGroup:insert(lightSystem)
+
 
     if self.world:listTypes("fruit") then
         self.world:extend("fruit")
@@ -66,7 +77,15 @@ function scene:create( event )
         self.world:extend("fallingPlatform")
     end
 
-    mainGroup:insert(self.world)
+    if self.world:listTypes("fire") then
+        self.world:extend("fire")
+    end
+
+    if self.world:listTypes("trigger") then
+        self.world:extend("trigger")
+    end
+
+
     
     self.questlog = questlog.new(self.world)
 
@@ -82,7 +101,7 @@ function scene:create( event )
     scene.restartGame = function ()
         -- player:finalize()
         print(self.level)
-        if self.level > 2 then
+        if self.level > 3 then
             self.level = 0
         end
         _GB.composer.gotoScene("scenes.refresh", {params = {level = self.level}})
@@ -96,13 +115,24 @@ function scene:create( event )
     end})
    
     frontGroup:insert(btnRestart)
+
+    if self.level == 3 then
+    
+        player.lightId = lightSystem:addLight(player, 100)
+    else
+        lightSystem:setAmbient(1.0)
+    end
+
+    lightSystem:toFront()
 end
 local function enterFrame()
     if player.isFinish then
         enterframe_remove(enterFrame)
     end 
+    -- test:centerObj(player)
     -- scene.world:centerXObj(player)
-    -- scene.world:boundsCheck()
+    scene.world:centerObject("player")
+    scene.world:boundsCheck()
 end
  
 -- show()
