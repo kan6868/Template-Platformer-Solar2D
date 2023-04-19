@@ -97,10 +97,9 @@ function scene:create( event )
 
     self.world:pointScale(1, player)
     self.world:setTargetObj(player)
-    -- self.world:centerYObj(player)
+
     scene.restartGame = function ()
-        -- player:finalize()
-        print(self.level)
+
         if self.level > 3 then
             self.level = 0
         end
@@ -129,8 +128,7 @@ local function enterFrame()
     if player.isFinish then
         enterframe_remove(enterFrame)
     end 
-    -- test:centerObj(player)
-    -- scene.world:centerXObj(player)
+    
     scene.world:centerObject("player")
     scene.world:boundsCheck()
 end
