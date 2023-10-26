@@ -10,31 +10,31 @@ local function getPoint(directionX, directionY, obj)
     local valX, valY = obj.x, obj.y
 
     if directionX == "left" then
-        valX = valX - offsetX/2
+        valX = valX - offsetX / 2
     elseif directionX == "right" then
-        valX = valX + offsetX/2
+        valX = valX + offsetX / 2
     elseif directionX == "middle" then
-        
+
     end
-    
+
     if directionY == "bottom" then
-        valY = valY + offsetY/2
+        valY = valY + offsetY / 2
     elseif directionY == "top" then
-        valY = valY - offsetY/2
-    end 
+        valY = valY - offsetY / 2
+    end
     return valX, valY
 end
 function M.new(instance, options)
     -- Get current scene and parent group
-    local scene = composer.getScene( composer.getSceneName( "current" ) )
+    local scene = composer.getScene(composer.getSceneName("current"))
 
     local x, y = instance.x, instance.y
     display.remove(instance)
-  
+
     local options   = options or {}
     local name      = options.name or "mask_dude"
 
-    local sheet = require ("res.characters.scripts."..name)
+    local sheet     = require("res.characters.scripts." .. name)
 
     -- load frame animation
     local heroSheet = graphics.newImageSheet(sheet:getImagePath(), sheet:getSheet())
@@ -71,29 +71,29 @@ function M.new(instance, options)
     instance.rightDir = 0
 
     instance.camera = display.newRect(instance.parent, instance.x, instance.y, instance.width, instance.height)
-    local checkWall = display.newCircle(instance.parent, instance.x - instance.width/2 + 5, instance.y, 5)
-    local checkGround = display.newCircle(instance.parent, instance.x, instance.y + instance.height/2 - 5, 5)
+    local checkWall = display.newCircle(instance.parent, instance.x - instance.width / 2 + 5, instance.y, 5)
+    local checkGround = display.newCircle(instance.parent, instance.x, instance.y + instance.height / 2 - 5, 5)
     instance.camera.alpha = 0
 
     checkWall.alpha = 0
     checkGround.alpha = 0
 
-    instance.enterFrame = function (event)
+    instance.enterFrame = function(event)
         if not instance.isDie and instance.state ~= "hit" then
             instance.vx, instance.vy = instance:getLinearVelocity()
             instance.dir = instance.leftDir + instance.rightDir
 
             local vx, vy = instance.vx, instance.vy
-   
+
             local dir = instance.dir
             local state = instance.state
             -- Following
-            checkWall.x, checkWall.y = instance.x + (instance.originalWidth/2) * instance.xScale - 5 * instance.xScale, instance.y
-            checkGround.x, checkGround.y = instance.x, instance.y + instance.originalHeight/2 - 5
+            checkWall.x, checkWall.y = instance.x + (instance.originalWidth / 2) * instance.xScale - 5 * instance.xScale,
+                instance.y
+            checkGround.x, checkGround.y = instance.x, instance.y + instance.originalHeight / 2 - 5
             instance.camera.x, instance.camera.y = instance.x, instance.y
 
-            if state ~= "idle" then 
-
+            if state ~= "idle" then
                 if dir == 0 and not instance.isJumping then
                     instance:setLinearVelocity(0, vy)
                     instance:chargeSequence("idle")
@@ -114,21 +114,19 @@ function M.new(instance, options)
             if state ~= "run" then
                 if dir ~= 0 then
                     if state == "idle" then
-         
                         instance:applyForce(instance.speed * dir, nil, instance.x, instance.y)
                         instance:chargeSequence("run")
                     elseif instance.isJumping then
                         instance:applyForce(instance.speedOnAir * dir, nil, instance.x, instance.y)
                     end
                     if math.abs(vx) >= 100 then
-                        instance:setLinearVelocity(100 * instance.dir, vy )
+                        instance:setLinearVelocity(100 * instance.dir, vy)
                     end
                 end
-            end 
+            end
             if state == "run" then
                 if instance.prevDir and instance.dir ~= 0 then
                     if instance.dir ~= instance.prevDir then
-
                         instance:setLinearVelocity(0, 0)
                         instance:applyForce(instance.speed * dir, 0)
                     end
@@ -136,7 +134,7 @@ function M.new(instance, options)
             end
 
             instance:flip(dir)
-            
+
             if instance.isJumping then
                 if vy > 0 and state ~= "fall" and not instance.isOnPlatformDown then
                     if instance.isFinish then
@@ -144,8 +142,7 @@ function M.new(instance, options)
                     else
                         instance:chargeSequence("fall")
                     end
-
-                end            
+                end
             end
         end
     end
@@ -154,7 +151,7 @@ function M.new(instance, options)
         if direction ~= 0 then
             self.xScale = direction
             instance.prevDir = direction
-        end 
+        end
     end
 
     function instance:chargeSequence(state)
@@ -174,20 +171,20 @@ function M.new(instance, options)
             scene.lightSystem:removeLight(self.lightId)
         end
     end
-    
+
     function instance:show()
         local effect = require "scripts.gameplay.appearing"
         self.appearing = effect.new(self, {})
         self.parent:insert(self.appearing)
         self.appearing:active()
     end
-    
+
     function instance:hurt()
 
     end
-    
+
     function instance:move()
-        
+
     end
 
     function instance:jump()
@@ -203,7 +200,7 @@ function M.new(instance, options)
                 self:chargeSequence("double jump")
                 self:setLinearVelocity(0, 0)
                 self:applyLinearImpulse(0, self.forceJump, self.x, self.y)
-                            -- instance:effectDust("assets/particle/dust_jump.json")
+                -- instance:effectDust("assets/particle/dust_jump.json")
             end
         end
 
@@ -219,11 +216,10 @@ function M.new(instance, options)
         -- self:effectDust("assets/particle/dust_jump.json")
     end
 
-
     function instance:die()
         if self.state ~= "hit" then
             -- self.isFixedRotation = false
-            
+
             self:finalize()
             self:chargeSequence("hit")
             scene.world.isFollow = false
@@ -231,7 +227,7 @@ function M.new(instance, options)
             self.isDie = true
             self.isSensor = true
             -- self.isFixedRotation = false
-            self:applyLinearImpulse( -3 * self.xScale, self.forceJump , self.x, self.y)
+            self:applyLinearImpulse(-3 * self.xScale, self.forceJump, self.x, self.y)
             -- self:applyAngularImpulse(-100)
         end
     end
@@ -239,11 +235,11 @@ function M.new(instance, options)
     function instance:pause()
         self.paused = true
     end
-    
+
     function instance:resume()
         self.paused = false
     end
-    
+
     function instance:preCollision(event)
         local other = event.other
 
@@ -254,15 +250,13 @@ function M.new(instance, options)
 
     function instance:postCollision(event)
         local other = event.other
-      
-        if other.name == "flyplatform" then
 
+        if other.name == "flyplatform" then
             if other.direction == "leftright" then
                 if self.dir == 0 and not self.isJumping then
-
                     local pX, pY = getPoint("none", "bottom", self)
-                    if pY <= (other.y - other.height/2) then
-                            self:setLinearVelocity(other.vx, self.vy)
+                    if pY <= (other.y - other.height / 2) then
+                        self:setLinearVelocity(other.vx, self.vy)
                     end
                 end
             elseif other.direction == "topdown" then
@@ -276,35 +270,32 @@ function M.new(instance, options)
                         self:setLinearVelocity(0, other.vy * 1.2)
                     end
                 else
-     
+
                 end
             end
         end
     end
-    
 
-    local function checkGroundCollision (event)
+    local function checkGroundCollision(event)
         local other = event.other
         local target = event.target
         local phase = event.phase
         if phase == "began" and not instance.isDie then
             if other.type == "ground" then
-              
-                    if instance.isWall then
-                        instance.isWall = false
-                    end
-             
-                    instance:setLinearVelocity(0,0)
-                    instance:chargeSequence("idle")
-                    instance.isJumping = false
-                    instance.isGrounded = true
-                    instance.canFallJump = true
+                if instance.isWall then
+                    instance.isWall = false
+                end
+
+                instance:setLinearVelocity(0, 0)
+                instance:chargeSequence("idle")
+                instance.isJumping = false
+                instance.isGrounded = true
+                instance.canFallJump = true
             end
 
             if other.name == "finish" and instance.state == "fall" then
                 local isQuestComplete = scene.questlog:checkAllQuestComplete()
                 if isQuestComplete then
-
                     local lvl = scene.level
                     print("Go to next level")
                     if lvl == "tutorial" then
@@ -322,29 +313,28 @@ function M.new(instance, options)
                     other:bounce()
                 end
             end
- 
+
             if other.name == "spike" then
                 instance:die()
+                timer.performWithDelay(1000, function()
+                    scene.restartGame()
+                end)
             end
-
-        elseif phase == "ended"  and not instance.isDie then
+        elseif phase == "ended" and not instance.isDie then
             if other.name == "flyplatform" and other.direction == "topdown" then
                 instance.isOnPlatformDown = false
             end
         end
     end
-    local function checkWallCollision (event)
+    local function checkWallCollision(event)
         local other = event.other
         local target = event.target
         local phase = event.phase
         if phase == "began" then
-
             if other.type == "ground" --[[and instance.vy > 0]] then --and not instance.isGround and instance.vy > 0 then
                 instance.isWall = true
             end
-      
         elseif phase == "ended" then
-            
             if other.type == "ground" --[[and instance.vy < 0]] then
                 instance.isWall = false
             end
@@ -352,70 +342,72 @@ function M.new(instance, options)
     end
 
     function instance:addController()
-        
         require "scripts.controller.controller".new(self)
-
     end
-    
+
     local function key(event)
-        if ( event.keyName == "a" or event.keyName == "left" ) then
+        if (event.keyName == "a" or event.keyName == "left") then
             if event.phase == "down" then
-              instance.leftDir = -1
+                instance.leftDir = -1
             elseif event.phase == "up" then
                 instance.leftDir = 0
             end
-          elseif ( event.keyName == "d" or event.keyName == "right" ) then
+        elseif (event.keyName == "d" or event.keyName == "right") then
             if event.phase == "down" then
                 instance.rightDir = 1
             elseif event.phase == "up" then
                 instance.rightDir = 0
             end
-          elseif ( event.keyName == "w" or event.keyName == "up" ) then
+        elseif (event.keyName == "w" or event.keyName == "up") then
             if event.phase == "down" then
                 instance.jumpPressed = true
                 instance:jump()
             elseif event.phase == "up" then
                 instance.jumpPressed = false
             end
-          elseif ( event.keyName == "p") then
+        elseif (event.keyName == "p") then
             if event.phase == "down" then
-              physics.setDrawMode("hybrid")
+                physics.setDrawMode("hybrid")
             elseif event.phase == "up" then
-              physics.setDrawMode("normal")
+                physics.setDrawMode("normal")
             end
-            elseif ( event.keyName == "space") then
-                if event.phase == "down" then
-                    print(
-                        "State : "..instance.state.."\n"..
-                        "VelocityX : "..instance.vx.."\n"..
-                        "VelocityY : "..instance.vy.."\n"..
-                        "Direction : "..instance.dir.."\n"..
-                        "isGrounded : "..tostring(instance.isGrounded).."\n"..
-                        "isWall : "..tostring(instance.isWall).."\n"..
-                        "isJumping : "..tostring(instance.isJumping).."\n"..
-                        "canFallJump : "..tostring(instance.canFallJump)
-                    )
-                elseif event.phase == "up" then
+        elseif (event.keyName == "space") then
+            if event.phase == "down" then
+                print(
+                    "State : " .. instance.state .. "\n" ..
+                    "VelocityX : " .. instance.vx .. "\n" ..
+                    "VelocityY : " .. instance.vy .. "\n" ..
+                    "Direction : " .. instance.dir .. "\n" ..
+                    "isGrounded : " .. tostring(instance.isGrounded) .. "\n" ..
+                    "isWall : " .. tostring(instance.isWall) .. "\n" ..
+                    "isJumping : " .. tostring(instance.isJumping) .. "\n" ..
+                    "canFallJump : " .. tostring(instance.canFallJump)
+                )
+            elseif event.phase == "up" then
 
-                end
-          end
-      
+            end
+        end
+
         -- IMPORTANT! Return false to indicate that this app is NOT overriding the received key
         -- This lets the operating system execute its default handling of the key
         return false
     end
 
     function instance:active()
-        physics.addBody(instance, "dynamic", {box = {halfWidth = 8, halfHeight = 10, x = 0, y = 0}, friction = .4,density = 1.5})
+        physics.addBody(instance, "dynamic",
+            { box = { halfWidth = 8, halfHeight = 10, x = 0, y = 0 }, friction = .4, density = 1.5 })
         instance.isFixedRotation = true
         instance.anchorY = 0.66
         instance.alpha = 1
-        
-        
-        physics.addBody(checkWall, "dynamic", {box = {halfWidth = 1, halfHeight = instance.height/4}, isSensor = true})
-        physics.addBody(checkGround, "dynamic", {box = {halfWidth = 8 * .9, halfHeight = 0.1}})
+
+
+        physics.addBody(checkWall, "dynamic", {
+            box = { halfWidth = 1, halfHeight = instance.height / 4 },
+            isSensor = true
+        })
+        physics.addBody(checkGround, "dynamic", { box = { halfWidth = 8 * .9, halfHeight = 0.1 } })
         checkGround.isFixedRotation = true
-        
+
         instance:chargeSequence("fall")
 
         instance:addEventListener("preCollision")
@@ -426,10 +418,12 @@ function M.new(instance, options)
         Runtime:addEventListener("key", key)
         Runtime:addEventListener("enterFrame", instance)
     end
+
     function instance:destroy()
         -- instance:removeSelf()
         -- instance = nil
     end
+
     function instance:finalize()
         -- On remove, cleanup instance, or call directly for non-visual
         instance:removeEventListener("preCollision")
@@ -438,9 +432,9 @@ function M.new(instance, options)
         Runtime:removeEventListener("key", key)
         Runtime:removeEventListener("enterFrame", instance)
     end
+
     function checkWall:finalize()
         checkWall:removeEventListener("collision", checkWallCollision)
-
     end
 
     function checkGround:finalize()
