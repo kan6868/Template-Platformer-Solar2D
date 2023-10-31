@@ -243,8 +243,11 @@ function M.new(instance, options)
     function instance:preCollision(event)
         local other = event.other
 
-        if other.type == "flyplatform" then
+        if other.name == "crossbar" then
             -- self.isOnPlatformDown = true
+            if event.contact and self.y > other.y - other.height * .5 then
+                event.contact.isEnabled = false
+            end
         end
     end
 
