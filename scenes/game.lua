@@ -36,7 +36,7 @@ function scene:create(event)
     local backGroup, mainGroup, frontGroup = sceneGroup.backGroup, sceneGroup.mainGroup, sceneGroup.frontGroup
 
     -- load world
-    self.level = params.level
+    self.level = 1
     print("lode map " .. "level_" .. self.level)
     local pathData = "res/maps/" .. "level_" .. self.level .. ".json"
     local pathImg = "res/maps"
