@@ -130,8 +130,8 @@
                  "type":"hero",
                  "visible":true,
                  "width":0,
-                 "x":485.333333333333,
-                 "y":381.666666666667
+                 "x":272,
+                 "y":368
                 }, 
                 {
                  "gid":397,
@@ -942,6 +942,68 @@
         }, 
         {
          "draworder":"topdown",
+         "id":18,
+         "name":"camera",
+         "objects":[
+                {
+                 "ellipse":true,
+                 "height":0,
+                 "id":168,
+                 "name":"camera",
+                 "properties":[
+                        {
+                         "name":"focusObject",
+                         "type":"object",
+                         "value":2
+                        }, 
+                        {
+                         "name":"limit",
+                         "type":"object",
+                         "value":169
+                        }],
+                 "rotation":0,
+                 "type":"camera",
+                 "visible":true,
+                 "width":0,
+                 "x":263.070900391475,
+                 "y":318.747281426707
+                }, 
+                {
+                 "height":0,
+                 "id":169,
+                 "name":"limit",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0,
+                         "y":640
+                        }, 
+                        {
+                         "x":1280,
+                         "y":640
+                        }, 
+                        {
+                         "x":1280,
+                         "y":0
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":false,
+                 "width":0,
+                 "x":0,
+                 "y":0
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":10,
          "name":"cloud",
          "objects":[],
@@ -1657,8 +1719,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":18,
- "nextobjectid":168,
+ "nextlayerid":19,
+ "nextobjectid":170,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

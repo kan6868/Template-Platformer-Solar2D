@@ -106,7 +106,7 @@ function M.new( data, assetPath, options)
 
   map:addEventListener("finalize")
   
-  Runtime:addEventListener("enterFrame", map)
+  -- Runtime:addEventListener("enterFrame", map)
 
   return map
 end

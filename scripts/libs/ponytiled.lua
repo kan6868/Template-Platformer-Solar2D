@@ -410,7 +410,7 @@ function M.new(data, dir)
     objectGroup.alpha = layer.opacity
     map:insert(objectGroup)
   end
-
+  
   function map:extend(...)
     local extensions = arg or {}
     -- each custom object above has its own ponywolf.plugin module
@@ -425,11 +425,9 @@ function M.new(data, dir)
           -- extend the display object with its own custom code
           images[i] = plugin.new(images[i])
         end
-        return images
       end
     end
   end
-
 -- return first display object with name
   function map:findObject(name, type)
     if not self.numChildren then return false end
@@ -445,6 +443,22 @@ function M.new(data, dir)
             else
               return layer[i]
             end
+          end
+        end
+      end
+    end
+    return false
+  end
+
+  function map:findObjectById(id)
+    if not self.numChildren then return false end
+    for layers = self.numChildren,1,-1 do
+      local layer = self[layers]
+      if layer.numChildren then
+        for i = layer.numChildren,1,-1 do
+
+          if tonumber(layer[i].id) == id then
+            return layer[i]
           end
         end
       end

@@ -51,51 +51,23 @@ function scene:create(event)
 
     mainGroup:insert(lightSystem)
 
+    player = self.world:findObject("hero")
 
     if self.world:listTypes("fruit") then
-        self.world:extend("fruit")
     end
+    player = hero.new(player, {})
 
-    if self.world:listTypes("cup") then
-        self.world:extend("cup")
-    end
-
-    if self.world:listTypes("spike") then
-        self.world:extend("spike")
-    end
-
-    if self.world:listTypes("flyplatform") then
-        self.world:extend("flyplatform")
-    end
-
-    if self.world:listTypes("jumpPoint") then
-        self.world:extend("jumpPoint")
-    end
-
-    if self.world:listTypes("fallingPlatform") then
-        self.world:extend("fallingPlatform")
-    end
-
-    if self.world:listTypes("fire") then
-        self.world:extend("fire")
-    end
-
-    if self.world:listTypes("trigger") then
-        self.world:extend("trigger")
-    end
-
+    self.world:extend("camera", "fruit", "cup", "spike", "flyplatform", "jumpPoint", "fallingPlatform", "fire", "trigger")
 
 
     self.questlog = questlog.new(self.world)
 
     sceneGroup.frontGroup:insert(self.questlog)
     self.questlog:hide(3000, -1)
-    player = self.world:findObject("hero")
 
-    player = hero.new(player, {})
 
-    self.world:pointScale(1, player)
-    self.world:setTargetObj(player)
+    -- self.world:pointScale(1, player)
+    -- self.world:setTargetObj(player)
 
     scene.restartGame = function()
         if self.level > 3 then
@@ -131,9 +103,9 @@ local function enterFrame()
     if player.isFinish then
         enterframe_remove(enterFrame)
     end
-
-    scene.world:centerObject("player")
-    scene.world:boundsCheck()
+    
+    -- scene.world:centerObject("player")
+    -- scene.world:boundsCheck()
 end
 
 -- show()
@@ -146,7 +118,7 @@ function scene:show(event)
         screenFadeOut(function()
             btnRestart:active()
             player:show()
-            self.world:pointScale(1, player)
+            -- self.world:pointScale(1, player)
         end)
     elseif (phase == "did") then
 

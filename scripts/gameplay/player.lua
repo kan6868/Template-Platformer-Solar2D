@@ -29,25 +29,33 @@ function M.new(instance, options)
     local scene = composer.getScene(composer.getSceneName("current"))
 
     local x, y = instance.x, instance.y
+    local parent = instance.parent
+    local name = instance.name
+    local type = instance.type
+    local id = instance.id
+
     display.remove(instance)
 
     local options   = options or {}
-    local name      = options.name or "mask_dude"
+    local imgName      = options.name or "mask_dude"
 
-    local sheet     = require("res.characters.scripts." .. name)
+    local sheet     = require("res.characters.scripts." .. imgName)
 
     -- load frame animation
     local heroSheet = graphics.newImageSheet(sheet:getImagePath(), sheet:getSheet())
     local sequences = sheet:getSquence()
 
 
-    instance = display.newSprite(scene.world, heroSheet, sequences)
+    instance = display.newSprite(parent, heroSheet, sequences)
     instance.x, instance.y = x, y
     instance.alpha = 0
     instance.originalHeight = instance.height
     instance.originalWidth = instance.width
 
-    instance.name = "hero"
+    instance.name = name
+    instance.type = type
+    instance.id = id
+
     instance.state = "none"
 
     instance.isGrounded = false
