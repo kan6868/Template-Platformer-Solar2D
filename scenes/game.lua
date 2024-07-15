@@ -36,7 +36,7 @@ function scene:create(event)
     local backGroup, mainGroup, frontGroup = sceneGroup.backGroup, sceneGroup.mainGroup, sceneGroup.frontGroup
 
     -- load world
-    self.level = 1
+    self.level = 0
     print("lode map " .. "level_" .. self.level)
     local pathData = "res/maps/" .. "level_" .. self.level .. ".json"
     local pathImg = "res/maps"
@@ -53,8 +53,6 @@ function scene:create(event)
 
     player = self.world:findObject("hero")
 
-    if self.world:listTypes("fruit") then
-    end
     player = hero.new(player, {})
 
     self.world:extend("camera", "fruit", "cup", "spike", "flyplatform", "jumpPoint", "fallingPlatform", "fire", "trigger")
