@@ -34,6 +34,10 @@ function M.new(instance)
     camera.margin_v = false
     camera.margin_h = false
 
+    function camera:setTarget(target)
+        focusObject = target
+    end
+
     function camera:limit()
         local halfWidth = aw / 2 --+ self.offsetH
         local halfHeight = ah / 2 --+ self.offsetV
